@@ -59,3 +59,6 @@ def split_matrix_into_training_set(data: list, train_size=26):
     data_copy = data
     random.shuffle(data_copy)
     return data_copy[:train_size], data_copy[train_size:]
+
+
+generate_data_to_csv(5, "simplerproblem", lambda x: [x[0], x[1], x[4]])
