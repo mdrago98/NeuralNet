@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import pandas as pd
 import csv
@@ -23,7 +25,7 @@ def transformation(x):
     return [x[0] | x[4], x[1] ^ x[2], x[3] & x[4]]
 
 
-def generate_data_to_csv(matrix_size: int, file_name: str = 'foo', transformation_function=transformation):
+def generate_data_to_csv(matrix_size: int, file_name: str = 'hard_problem', transformation_function=transformation):
     """
     A helper function to aid in generating csv data
     :param transformation_function: The transformation function for generating the output bits
@@ -34,12 +36,12 @@ def generate_data_to_csv(matrix_size: int, file_name: str = 'foo', transformatio
     input_array = np.asarray(to_matrix(matrix_size))
     output = np.apply_along_axis(transformation_function, 1, input_array)
     data_frame = pd.DataFrame(np.concatenate((input_array, output), axis=1))
-    data_frame.to_csv(f'{file_name}.csv', header=None, index=None)
+    data_frame.to_csv(os.path.join('resources', f'{file_name}.csv'), header=None, index=None)
     return input_array, output
 
 
-def import_data_from_csv_and_split(filename: str = 'foo', input_range=5):
-    with open(f'{filename}.csv') as csv_file:
+def import_data_from_csv_and_split(filename: str = 'hard_problem', input_range=5):
+    with open(os.path.join('resources', f'{filename}.csv')) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         input_matrix = []
         output_matrix = []
@@ -49,8 +51,8 @@ def import_data_from_csv_and_split(filename: str = 'foo', input_range=5):
         return input_matrix, output_matrix
 
 
-def import_plain_data_from_csv(filename: str = 'foo'):
-    with open(f'{filename}.csv') as csv_file:
+def import_plain_data_from_csv(filename: str = 'hard_problem'):
+    with open(os.path.join('resources', f'{filename}.csv')) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         return [row for row in csv_reader]
 
@@ -61,4 +63,6 @@ def split_matrix_into_training_set(data: list, train_size=26):
     return data_copy[:train_size], data_copy[train_size:]
 
 
-generate_data_to_csv(5, "simplerproblem", lambda x: [x[0], x[1], x[4]])
+generate_data_to_csv(5, "simple_problem", lambda x: [x[0], x[1], x[4]])
+generate_data_to_csv(5, 'normal_problem', lambda x: [x[0] | x[4], x[1] & x[2], x[4]])
+generate_data_to_csv(5, 'hard_problem', transformation)
