@@ -2,10 +2,9 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
 import argparse
 
-from csv_utils import split_matrix_into_training_set, import_plain_data_from_csv
+from utils.csv_utils import split_matrix_into_training_set, import_plain_data_from_csv
 
 
 def sigmoid(x: np.ndarray):
