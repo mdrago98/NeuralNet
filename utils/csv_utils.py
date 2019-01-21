@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import numpy as np
 import pandas as pd
 import csv
@@ -9,8 +7,13 @@ import os
 resource_loc = 'resources'
 
 
-def to_matrix(n):
-    def gen(n):
+def to_matrix(n: int):
+    """
+    A helper function that generates a matrix of bit combinations
+    :param n: size of the matrix
+    :return: a matrix with the input combinations
+    """
+    def gen(n: int):
         for i in range(1, 2 ** n - 1):
             yield '{:0{n}b}'.format(i, n=n)
 
@@ -22,6 +25,11 @@ def to_matrix(n):
 
 
 def transformation(x):
+    """
+    A function that transforms 5 inputs into 3 outputs. (generates hard data set)
+    :param x: a list to transform
+    :return: the transformed list of size 3
+    """
     return [x[0] | x[4], x[1] ^ x[2], x[3] & x[4]]
 
 
@@ -41,6 +49,12 @@ def generate_data_to_csv(matrix_size: int, file_name: str = 'hard_problem', tran
 
 
 def import_data_from_csv_and_split(filename: str = 'hard_problem', input_range=5):
+    """
+    A function that parses a csv file with training data and converts it into a matrix
+    :param filename: a string representation of the file name
+    :param input_range: the size of input data
+    :return: a tuple (input matrix, output matrix)
+    """
     with open(os.path.join('resources', f'{filename}.csv')) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         input_matrix = []
@@ -52,6 +66,11 @@ def import_data_from_csv_and_split(filename: str = 'hard_problem', input_range=5
 
 
 def import_plain_data_from_csv(filename: str = 'hard_problem'):
+    """
+    A function that is responsible for importing data from csv
+    :param filename: a string representing the file name
+    :return: a list representing the csv
+    """
     with open(os.path.join('resources', f'{filename}.csv')) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         return [row for row in csv_reader]
@@ -61,8 +80,3 @@ def split_matrix_into_training_set(data: list, train_size=26):
     data_copy = data
     random.shuffle(data_copy)
     return data_copy[:train_size], data_copy[train_size:]
-
-
-generate_data_to_csv(5, "simple_problem", lambda x: [x[0], x[1], x[4]])
-generate_data_to_csv(5, 'normal_problem', lambda x: [x[0] | x[4], x[1] & x[2], x[4]])
-generate_data_to_csv(5, 'hard_problem', transformation)

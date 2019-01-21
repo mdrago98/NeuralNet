@@ -3,8 +3,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
+import argparse
 
-from CsvUtils import split_matrix_into_training_set, import_plain_data_from_csv
+from csv_utils import split_matrix_into_training_set, import_plain_data_from_csv
 
 
 def sigmoid(x: np.ndarray):
@@ -126,24 +127,26 @@ class NeuralNet(object):
 
 if __name__ == '__main__':
     # Load boolean function dataset (simple_problem, normal_problem, hard_problem)
-    try:
-        dataset = sys.argv[1]
-    except IndexError:
-        dataset = 'normal_problem'
-    training_data, verification_data = split_matrix_into_training_set(import_plain_data_from_csv(dataset))
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dataset', default='normal_problem',
+                        help='the data set to use: simple_problem, normal_problem, hard_problem')
+    args = parser.parse_args()
+
+    training_data, verification_data = split_matrix_into_training_set(import_plain_data_from_csv(args.dataset))
     X_train = np.asarray([row[:5] for row in training_data], dtype=int)
     y_train = np.asarray([row[5:] for row in training_data], dtype=int)
 
-    # Neural net initialization
     NN = NeuralNet(X_train, 4, y_train)
+    # Neural net initialization
     total_bad_facts = NN.train()
     plt.plot(total_bad_facts)
     plt.ylabel('bad facts')
     plt.show()
+    print(f"Bad Facts on Last Epoc: {total_bad_facts[len(total_bad_facts) - 1]}")
 
     # Verification
     X_verif = np.asarray([row[:5] for row in verification_data], dtype=int)
     Y_verif = np.asarray([row[5:] for row in verification_data], dtype=int)
     accuracy = NN.get_accuracy(X_verif, Y_verif)
 
-    print(f"Accuracy: {accuracy} \nBad Facts on Last Epoc: {total_bad_facts[len(total_bad_facts) - 1]}")
+    print(f"Accuracy: {accuracy}")

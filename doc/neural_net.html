@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module neural_net</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>neural_net</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/drago/PycharmProjects/neuralnetassignment/neural_net.py">/home/drago/PycharmProjects/neuralnetassignment/neural_net.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+</td><td width="25%" valign=top><a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="neural_net.html#NeuralNet">NeuralNet</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="NeuralNet">class <strong>NeuralNet</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="NeuralNet-__calc_bad_facts__"><strong>__calc_bad_facts__</strong></a>(self, errors:numpy.ndarray) -&gt; int</dt><dd><tt>A&nbsp;helper&nbsp;function&nbsp;that&nbsp;calculates&nbsp;the&nbsp;amount&nbsp;of&nbsp;bad&nbsp;facts&nbsp;in&nbsp;an&nbsp;epoch.<br>
+:param&nbsp;errors:&nbsp;a&nbsp;numpy&nbsp;array&nbsp;representing&nbsp;the&nbsp;errors<br>
+:return:&nbsp;an&nbsp;int&nbsp;representing&nbsp;the&nbsp;bad&nbsp;facts</tt></dd></dl>
+
+<dl><dt><a name="NeuralNet-__init__"><strong>__init__</strong></a>(self, inputs:numpy.ndarray, hidden:int, outputs:numpy.ndarray, error_threshold:float=0.2, learning_rate:float=0.2, wh=None, wo=None, activation=&lt;function sigmoid at 0x7f942e06a1e0&gt;, activation_derivation=&lt;function derivatives_sigmoid at 0x7f9400de00d0&gt;) -&gt; None</dt><dd><tt>A&nbsp;constructor&nbsp;that&nbsp;initializes&nbsp;the&nbsp;Neural&nbsp;net&nbsp;with&nbsp;the&nbsp;required&nbsp;parameters.<br>
+:param&nbsp;inputs:&nbsp;a&nbsp;numpy&nbsp;array&nbsp;representing&nbsp;the&nbsp;inputs<br>
+:param&nbsp;hidden:&nbsp;an&nbsp;int&nbsp;representing&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;hidden&nbsp;layer<br>
+:param&nbsp;outputs:&nbsp;a&nbsp;numpy&nbsp;array&nbsp;representing&nbsp;the&nbsp;outputs<br>
+:param&nbsp;error_threshold:&nbsp;a&nbsp;float&nbsp;representing&nbsp;the&nbsp;error&nbsp;threshold<br>
+:param&nbsp;learning_rate:&nbsp;a&nbsp;float&nbsp;representing&nbsp;the&nbsp;learning&nbsp;rate<br>
+:param&nbsp;wh:&nbsp;a&nbsp;numpy&nbsp;array&nbsp;representing&nbsp;the&nbsp;hidden&nbsp;layer&nbsp;weights<br>
+:param&nbsp;wo:&nbsp;a&nbsp;numpy&nbsp;array&nbsp;representing&nbsp;the&nbsp;output&nbsp;layer&nbsp;weights<br>
+:param&nbsp;activation:&nbsp;the&nbsp;activation&nbsp;function<br>
+:param&nbsp;activation_derivation:&nbsp;the&nbsp;derivation&nbsp;of&nbsp;the&nbsp;activation&nbsp;function</tt></dd></dl>
+
+<dl><dt><a name="NeuralNet-feedforward"><strong>feedforward</strong></a>(self, inp:numpy.ndarray=None) -&gt; (&lt;class 'numpy.ndarray'&gt;, &lt;class 'numpy.ndarray'&gt;)</dt><dd><tt>A&nbsp;feed&nbsp;forward&nbsp;method&nbsp;that&nbsp;allows&nbsp;the&nbsp;neural&nbsp;net&nbsp;to&nbsp;'think'.<br>
+:param&nbsp;inp:&nbsp;a&nbsp;numpy&nbsp;array&nbsp;representing&nbsp;the&nbsp;inputs<br>
+:return:&nbsp;a&nbsp;tuple&nbsp;representing&nbsp;the&nbsp;output&nbsp;of&nbsp;the&nbsp;hidden&nbsp;and&nbsp;final&nbsp;output</tt></dd></dl>
+
+<dl><dt><a name="NeuralNet-get_accuracy"><strong>get_accuracy</strong></a>(self, x_verify:numpy.ndarray, y_verify:numpy.ndarray) -&gt; float</dt><dd><tt>A&nbsp;helper&nbsp;function&nbsp;that&nbsp;feeds&nbsp;forward&nbsp;the&nbsp;inputs,&nbsp;verifies&nbsp;their&nbsp;output&nbsp;and&nbsp;returns&nbsp;the&nbsp;neural&nbsp;net's&nbsp;accuracy.<br>
+:param&nbsp;x_verify:&nbsp;A&nbsp;numpy&nbsp;2d&nbsp;array&nbsp;of&nbsp;the&nbsp;inputs<br>
+:param&nbsp;y_verify:&nbsp;A&nbsp;numpy&nbsp;2d&nbsp;array&nbsp;of&nbsp;the&nbsp;expected&nbsp;outputs<br>
+:return:&nbsp;a&nbsp;float&nbsp;representing&nbsp;the&nbsp;accuracy&nbsp;in&nbsp;%</tt></dd></dl>
+
+<dl><dt><a name="NeuralNet-train"><strong>train</strong></a>(self, epoch:int=1000) -&gt; list</dt><dd><tt>A&nbsp;method&nbsp;responsible&nbsp;for&nbsp;training&nbsp;the&nbsp;neural&nbsp;network.<br>
+:param&nbsp;epoch:&nbsp;an&nbsp;int&nbsp;representing&nbsp;the&nbsp;number&nbsp;of&nbsp;iterations&nbsp;over&nbsp;the&nbsp;training&nbsp;data&nbsp;set<br>
+:return:&nbsp;a&nbsp;list&nbsp;of&nbsp;epochs&nbsp;vs&nbsp;bad&nbsp;facts</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-derivatives_sigmoid"><strong>derivatives_sigmoid</strong></a>(x:numpy.ndarray)</dt><dd><tt>A&nbsp;function&nbsp;that&nbsp;works&nbsp;out&nbsp;the&nbsp;sigmoid&nbsp;derivation&nbsp;for&nbsp;x<br>
+:param&nbsp;x:&nbsp;a&nbsp;numpy&nbsp;array&nbsp;or&nbsp;number&nbsp;to&nbsp;work&nbsp;out&nbsp;sigmoid&nbsp;prime<br>
+:return:&nbsp;the&nbsp;value&nbsp;of&nbsp;the&nbsp;sigmoid&nbsp;derivative</tt></dd></dl>
+ <dl><dt><a name="-sigmoid"><strong>sigmoid</strong></a>(x:numpy.ndarray)</dt><dd><tt>A&nbsp;function&nbsp;that&nbsp;works&nbsp;out&nbsp;sigmoid&nbsp;for&nbsp;x<br>
+:param&nbsp;x:&nbsp;a&nbsp;numpy&nbsp;array&nbsp;or&nbsp;number&nbsp;to&nbsp;work&nbsp;out&nbsp;sigmoid<br>
+:return:</tt></dd></dl>
+</td></tr></table>
+</body></html>
