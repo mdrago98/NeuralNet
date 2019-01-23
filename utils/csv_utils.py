@@ -11,7 +11,7 @@ def to_matrix(n: int):
     """
     A helper function that generates a matrix of bit combinations
     :param n: size of the matrix
-    :return: a matrix with the input combinations
+    :return: A matrix with the input combinations
     """
     def gen(n: int):
         for i in range(1, 2 ** n - 1):
@@ -27,17 +27,17 @@ def to_matrix(n: int):
 def transformation(x):
     """
     A function that transforms 5 inputs into 3 outputs. (generates hard data set)
-    :param x: a list to transform
-    :return: the transformed list of size 3
+    :param x: A list to transform
+    :return: The transformed list of size 3
     """
     return [x[0] | x[4], x[1] ^ x[2], x[3] & x[4]]
 
 
 def generate_data_to_csv(matrix_size: int, file_name: str = 'hard_problem', transformation_function=transformation):
     """
-    A helper function to aid in generating csv data
+    A helper function to aid in the generation of csv data
     :param transformation_function: The transformation function for generating the output bits
-    :param matrix_size: The size of the matrix
+    :param matrix_size: The size of the input matrix
     :param file_name: The file name to produce
     :return: Input matrix and output matrix
     """
@@ -76,7 +76,13 @@ def import_plain_data_from_csv(filename: str = 'hard_problem'):
         return [row for row in csv_reader]
 
 
-def split_matrix_into_training_set(data: list, train_size=26):
+def split_matrix_into_training_set(data: list, train_size=26) -> (list, list):
+    """
+    A method that splits a matrix into a training matrix a verification matrix
+    :param data: the matrix
+    :param train_size: the size of the training data
+    :return: a tuple (training data, verification data)
+    """
     data_copy = data
     random.shuffle(data_copy)
     return data_copy[:train_size], data_copy[train_size:]

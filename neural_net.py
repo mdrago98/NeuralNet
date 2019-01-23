@@ -26,7 +26,9 @@ def derivatives_sigmoid(x: np.ndarray):
 
 
 class NeuralNet(object):
-
+    """
+    A class that represents a neural net
+    """
     def __init__(self, inputs: np.ndarray, hidden: int, outputs: np.ndarray, error_threshold: float = 0.2,
                  learning_rate: float = 0.2, wh=None, wo=None, activation=sigmoid,
                  activation_derivation=derivatives_sigmoid) -> None:
@@ -60,6 +62,14 @@ class NeuralNet(object):
             self.wo = np.random.random_sample((hidden, outputs[0].size))
         else:
             self.wo = wo
+
+    def __round_nn_output__(self, value: int):
+        """
+        A helper function that rounds a value using the error threshold as a midpoint
+        :param value: the value to round
+        :return: 0 IFF value < error threshold ELSE 1
+        """
+        return 0 if value <= self.error_threshold else 1
 
     def __calc_bad_facts__(self, errors: np.ndarray) -> int:
         """
@@ -104,40 +114,54 @@ class NeuralNet(object):
             layer1_adjustment = self.inputs.T.dot(d_hidden)
             layer2_adjustment = out_h.T.dot(d_output)
 
-            self.wh += layer1_adjustment
-            self.wo += layer2_adjustment
+            self.wh += self.learning_rate * layer1_adjustment
+            self.wo += self.learning_rate * layer2_adjustment
 
             bad_facts.append(self.__calc_bad_facts__(error))
         return bad_facts
 
-    def get_accuracy(self, x_verify: np.ndarray, y_verify: np.ndarray) -> float:
+    def get_confusion_matrix(self, x_verify: np.ndarray, y_verify: np.ndarray) -> (np.ndarray, tuple):
         """
         A helper function that feeds forward the inputs, verifies their output and returns the neural net's accuracy.
         :param x_verify: A numpy 2d array of the inputs
         :param y_verify: A numpy 2d array of the expected outputs
-        :return: a float representing the accuracy in %
+        :return: a numpy array representing the confusion matrix and a tuple (recall, specificity, type_one_error,
+        type_two_error)
         """
         test_neural_net = NeuralNet(inputs=x_verify, hidden=self.hidden, outputs=y_verify, wh=self.wh, wo=self.wo)
-        out_o = test_neural_net.feedforward(x_verify)[1].round()
+        round_output = np.vectorize(self.__round_nn_output__)
+        out_o = round_output(test_neural_net.feedforward(x_verify)[1])
         errors = int(np.sum(out_o == y_verify))
-        total_number_of_values = int(np.shape(y_verify)[0] * np.shape(y_verify)[1])
-        return errors / total_number_of_values * 100
+        true_pos = np.sum(np.logical_and(out_o == 1, y_verify == 1))
+        true_negative = np.sum(np.logical_and(out_o == 0, y_verify == 0))
+        false_positive = np.sum(np.logical_and(out_o == 1, y_verify == 0))
+        false_negative = np.sum(np.logical_and(out_o == 0, y_verify == 1))
+        recall = true_pos + true_pos / true_pos + false_negative
+        specificity = true_negative / (false_positive + true_negative)
+        precision = true_pos / (true_pos + false_positive)
+        type_one_error = false_positive / (false_positive + true_negative)
+        type_two_error = false_positive / (false_positive + true_negative) if false_positive != 0 else 0
+        rates = (recall, specificity, precision, type_one_error, type_two_error)
+        return np.array([[true_pos, false_negative], [false_positive, true_negative]], np.int32), rates
 
 
 if __name__ == '__main__':
     # Load boolean function dataset (simple_problem, normal_problem, hard_problem)
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', default='normal_problem',
-                        help='the data set to use: simple_problem, normal_problem, hard_problem')
+                        help='The data set to use: simple_problem, normal_problem, hard_problem. '
+                             + 'Default: normal_problem')
+    parser.add_argument('--epochs', default='1000',
+                        help='The amount of epochs the training algorithm will iterate through. Default: 1000')
     args = parser.parse_args()
 
     training_data, verification_data = split_matrix_into_training_set(import_plain_data_from_csv(args.dataset))
     X_train = np.asarray([row[:5] for row in training_data], dtype=int)
     y_train = np.asarray([row[5:] for row in training_data], dtype=int)
 
-    NN = NeuralNet(X_train, 4, y_train)
+    neural_net = NeuralNet(X_train, 4, y_train)
     # Neural net initialization
-    total_bad_facts = NN.train()
+    total_bad_facts = neural_net.train(epoch=int(args.epochs))
     plt.plot(total_bad_facts)
     plt.ylabel('bad facts')
     plt.show()
@@ -146,6 +170,7 @@ if __name__ == '__main__':
     # Verification
     X_verif = np.asarray([row[:5] for row in verification_data], dtype=int)
     Y_verif = np.asarray([row[5:] for row in verification_data], dtype=int)
-    accuracy = NN.get_accuracy(X_verif, Y_verif)
-
-    print(f"Accuracy: {accuracy}")
+    matrix, rates = neural_net.get_confusion_matrix(X_verif, Y_verif)
+    print(f"Confusion matrix: \n {matrix}")
+    print(f"Recall {rates[0]}, Specificity {rates[1]}, Precision {rates[2]},"
+          + f" Type 1 error {rates[3]}, Type 2 error {rates[4]}")
