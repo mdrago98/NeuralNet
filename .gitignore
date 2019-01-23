@@ -330,3 +330,6 @@ TSWLatexianTemp*
 
 # standalone packages
 *.sta
+
+# pycache
+__pycache__
