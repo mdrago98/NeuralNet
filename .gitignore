@@ -333,3 +333,6 @@ TSWLatexianTemp*
 
 # pycache
 __pycache__
+
+#vscode settings
+.vscode
